@@ -19,23 +19,11 @@ HERE = Path(__file__).resolve().parent
 # never generated or modified by this runner; it is copied as-is.
 ENTRY = HERE / "entry.png"
 
-# Fallback output directory when MAKEFUN_OUTPUT_DIR is not set.
-DEFAULT_OUTPUT_DIR = "/output"
-
-# Name of the output file written into the output directory.
-# (Kept as a named constant so the harness-visible filename is obvious.)
-OUTPUT_FILENAME = "entry.png"
-
-
-def resolve_output_dir() -> Path:
-    """Return the output directory from the environment, or the default."""
-    return Path(os.environ.get("MAKEFUN_OUTPUT_DIR", DEFAULT_OUTPUT_DIR))
-
 
 def main() -> None:
-    output_dir = resolve_output_dir()
+    output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
     output_dir.mkdir(parents=True, exist_ok=True)
-    dest = output_dir / OUTPUT_FILENAME
+    dest = output_dir / "entry.png"
     shutil.copyfile(ENTRY, dest)
     print(f"Wrote {dest} ({dest.stat().st_size} bytes)")
 
