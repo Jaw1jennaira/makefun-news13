@@ -10,11 +10,15 @@ import shutil
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+# The pre-made entry image bundled in this repo.
 ENTRY = HERE / "entry.png"
 
 
+DEFAULT_OUTPUT_DIR = "/output"
+
+
 def main() -> None:
-    output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", DEFAULT_OUTPUT_DIR))
     output_dir.mkdir(parents=True, exist_ok=True)
     dest = output_dir / "entry.png"
     shutil.copyfile(ENTRY, dest)
