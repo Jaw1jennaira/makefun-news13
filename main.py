@@ -1,39 +1,34 @@
-#!/usr/bin/env python3
-"""make.fun news-image-01 entry: The World Daily — 13 November 2026.
+"""The World Daily — 13 November 2026.
 
-Runner for a pre-made entry image. It copies the bundled newspaper
-front page ("THE WORLD DAILY", 13 November 2026) into the output
-directory requested by the make.fun harness.
-
-Python 3.13 standard library only — no third-party dependencies.
+Entry runner for the make.fun news-image-01 competition ("Sum up
+13 November's world news in one image"). It places the finished
+newspaper front page into the directory requested by the harness so
+the image can be collected as the competition submission.
 """
 
 import os
 import shutil
 from pathlib import Path
 
-# Directory containing this script (and the bundled entry image).
 HERE = Path(__file__).resolve().parent
-
-# The pre-made entry image bundled in this repo. The image itself is
-# never generated or modified by this runner; it is copied as-is.
-ENTRY = HERE / "entry.png"
-
-# Name of the output file written into the output directory.
+ENTRY_PATH = HERE / "entry.png"
 OUTPUT_FILENAME = "entry.png"
+DEFAULT_OUTPUT_DIR = "/output"
 
 
-def resolve_output_dir() -> Path:
-    """Return the output directory from the environment, or the default."""
-    return Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+def resolve_output_dir():
+    """Return the output directory from MAKEFUN_OUTPUT_DIR, else default."""
+    chosen = os.environ.get("MAKEFUN_OUTPUT_DIR") or DEFAULT_OUTPUT_DIR
+    return Path(chosen)
 
 
-def main() -> None:
-    output_dir = resolve_output_dir()
-    output_dir.mkdir(parents=True, exist_ok=True)
-    dest = output_dir / OUTPUT_FILENAME
-    shutil.copyfile(ENTRY, dest)
-    print(f"Wrote {dest} ({dest.stat().st_size} bytes)")
+def main():
+    out_dir = resolve_output_dir()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    destination = out_dir / OUTPUT_FILENAME
+    shutil.copyfile(ENTRY_PATH, destination)
+    copied_bytes = destination.stat().st_size
+    print(f"Wrote {destination} ({copied_bytes} bytes)")
 
 
 if __name__ == "__main__":

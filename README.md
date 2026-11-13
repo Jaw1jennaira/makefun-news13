@@ -1,19 +1,26 @@
 # The World Daily — 13 November 2026
 
-make.fun news-image-01 entry: "Sum up 13 November's world news in one image".
+Entry for the make.fun **news-image-01** competition: "Sum up 13 November's
+world news in one image".
 
-A front-page newspaper image summarising 13 November 2026 world news:
-Nvidia CEO resigns, Europe joins Ukraine peace talks, tankers in the
-Strait of Hormuz, and the Microsoft outage.
+The entry is a single newspaper front page, **THE WORLD DAILY**, dated
+13 November 2026. Its headlines capture the day's biggest stories: the
+Nvidia chief executive stepping down, European nations joining the Ukraine
+peace talks, tankers in the Strait of Hormuz, and a major Microsoft outage.
 
-## Run
+## Files
+
+- `entry.png` — the finished front page image.
+- `main.py` — copies `entry.png` into the harness output directory.
+
+## Running
 
 ```sh
-python3 main.py
+MAKEFUN_OUTPUT_DIR=/output python3 main.py
 ```
 
-Writes `entry.png` to `$MAKEFUN_OUTPUT_DIR` (default `/output`).
+The image is written to `$MAKEFUN_OUTPUT_DIR/entry.png` (default `/output`).
 
 ## License
 
-MIT — see LICENSE.
+MIT — see `LICENSE`.
