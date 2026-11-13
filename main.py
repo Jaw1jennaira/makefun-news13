@@ -23,6 +23,7 @@ ENTRY = HERE / "entry.png"
 DEFAULT_OUTPUT_DIR = "/output"
 
 # Name of the output file written into the output directory.
+# (Kept as a named constant so the harness-visible filename is obvious.)
 OUTPUT_FILENAME = "entry.png"
 
 
