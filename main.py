@@ -19,11 +19,19 @@ HERE = Path(__file__).resolve().parent
 # never generated or modified by this runner; it is copied as-is.
 ENTRY = HERE / "entry.png"
 
+# Name of the output file written into the output directory.
+OUTPUT_FILENAME = "entry.png"
+
+
+def resolve_output_dir() -> Path:
+    """Return the output directory from the environment, or the default."""
+    return Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+
 
 def main() -> None:
-    output_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    output_dir = resolve_output_dir()
     output_dir.mkdir(parents=True, exist_ok=True)
-    dest = output_dir / "entry.png"
+    dest = output_dir / OUTPUT_FILENAME
     shutil.copyfile(ENTRY, dest)
     print(f"Wrote {dest} ({dest.stat().st_size} bytes)")
 
