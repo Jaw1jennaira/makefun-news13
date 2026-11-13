@@ -1,42 +1,40 @@
 """The World Daily — 13 November 2026.
 
-Entry runner for the make.fun news-image-01 competition ("Sum up
-13 November's world news in one image"). It places the finished
-newspaper front page into the directory requested by the harness so
-the image can be collected as the competition submission.
+Entry runner for the make.fun news-image-01 competition:
+"Sum up 13 November's world news in one image".
+
+The runner copies the prepared newspaper image (entry.png) into the
+competition output directory so the build harness can pick it up.
+Only the Python 3.13 standard library is used.
 """
 
 import os
 import shutil
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-ENTRY_PATH = HERE / "entry.png"
+SCRIPT_DIR = Path(__file__).resolve().parent
+ENTRY_PATH = SCRIPT_DIR / "entry.png"
 OUTPUT_FILENAME = "entry.png"
 DEFAULT_OUTPUT_DIR = "/output"
+OUTPUT_DIR_ENV_VAR = "MAKEFUN_OUTPUT_DIR"
 
 
-def resolve_output_dir():
-    """Return the output directory from MAKEFUN_OUTPUT_DIR, else default."""
-    chosen = os.environ.get("MAKEFUN_OUTPUT_DIR") or DEFAULT_OUTPUT_DIR
-    return Path(chosen)
+def resolve_output_dir() -> Path:
+    """Return the output directory from the environment, or the default."""
+    configured = os.environ.get(OUTPUT_DIR_ENV_VAR, "").strip()
+    if configured:
+        return Path(configured)
+    return Path(DEFAULT_OUTPUT_DIR)
 
 
-def main():
-    if not ENTRY_PATH.is_file():
-        raise SystemExit(f"Missing entry image: {ENTRY_PATH}")
-    source_bytes = ENTRY_PATH.stat().st_size
-    print(f"Copying {ENTRY_PATH} ({source_bytes} bytes)")
-    out_dir = resolve_output_dir()
-    out_dir.mkdir(parents=True, exist_ok=True)
-    destination = out_dir / OUTPUT_FILENAME
+def main() -> None:
+    """Copy entry.png into the output directory and report its size."""
+    output_dir = resolve_output_dir()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    destination = output_dir / OUTPUT_FILENAME
     shutil.copyfile(ENTRY_PATH, destination)
     copied_bytes = destination.stat().st_size
-    if copied_bytes != source_bytes:
-        raise SystemExit(
-            f"Copy size mismatch: {copied_bytes} != {source_bytes} bytes"
-        )
-    print(f"Wrote {destination} ({copied_bytes} bytes)")
+    print(f"Copied {ENTRY_PATH.name} -> {destination} ({copied_bytes} bytes)")
 
 
 if __name__ == "__main__":
