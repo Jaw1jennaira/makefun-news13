@@ -29,11 +29,19 @@ def resolve_output_dir() -> Path:
 
 def main() -> None:
     """Copy entry.png into the output directory and report its size."""
+    if not ENTRY_PATH.is_file():
+        raise SystemExit(f"error: entry image not found: {ENTRY_PATH}")
+    source_bytes = ENTRY_PATH.stat().st_size
+    print(f"Source: {ENTRY_PATH.name} ({source_bytes} bytes)")
     output_dir = resolve_output_dir()
     output_dir.mkdir(parents=True, exist_ok=True)
     destination = output_dir / OUTPUT_FILENAME
     shutil.copyfile(ENTRY_PATH, destination)
     copied_bytes = destination.stat().st_size
+    if copied_bytes != source_bytes:
+        raise SystemExit(
+            f"error: copy size mismatch: {copied_bytes} != {source_bytes} bytes"
+        )
     print(f"Copied {ENTRY_PATH.name} -> {destination} ({copied_bytes} bytes)")
 
 
